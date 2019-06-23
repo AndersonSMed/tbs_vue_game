@@ -17,22 +17,13 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-layout column>
-          <v-flex>
-            <v-text-field
-              outline
-              single-line
-              hide-details
-              label="IP do servidor"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
         <v-layout>
           <v-flex>
             <v-btn
               block
               outline
               class="green--text font-weight-bold"
+              @click="conectar"
             >
               ENTRAR
             </v-btn>
@@ -48,7 +39,10 @@
 export default {
   data () {
     return {
-
+    }
+  },
+  methods: {
+    conectar () {
     }
   }
 }
