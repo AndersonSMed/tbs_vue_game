@@ -4,7 +4,7 @@
       <v-flex xs12 md8>
         <v-card height="calc(100%)">
           <v-card-text class="text-xs-center headline font-weight-light grey--text text--darken-2">
-            ANDERSON
+            {{player.nickname}}
           </v-card-text>
           <v-card-text>
             <v-layout row wrap>
@@ -15,7 +15,7 @@
                 <v-progress-linear
                   color="error"
                   background-opacity="0"
-                  :value="100"
+                  :value="player.vida"
                   height="15"
                 ></v-progress-linear>
               </v-flex>
@@ -26,7 +26,7 @@
                 <v-progress-linear
                   color="success"
                   background-opacity="0"
-                  :value="100"
+                  :value="player.stamina"
                   height="15"
                 ></v-progress-linear>
               </v-flex>
@@ -39,11 +39,11 @@
                   Jogadores
                 </div>
                 <v-list dense style="border: 1px solid black">
-                  <template v-for="(jogador, index) in jogadores">
-                    <v-list-tile :key="index" ripple @click="selecionarJogador(jogador)">
+                  <template v-for="(jogador) in players">
+                    <v-list-tile :key="jogador.sid" ripple @click="selecionarJogador(jogador)">
                       <v-list-tile-content>
                         <v-list-tile-title class="font-weight-medium body-1">
-                          {{jogador.nome}}
+                          {{jogador.nickname}}
                         </v-list-tile-title>
                       </v-list-tile-content>
                       <v-list-tile-action>
@@ -75,7 +75,34 @@
           </v-card-text>
           <v-layout row wrap fill-height>
             <v-flex xs7 class="pl-4">
-              <v-card height="calc(100% - 450px)">awd</v-card>
+              <v-card height="calc(100% - 450px)" style="background-color: rgba(0,0,0,0.7)" flat>
+                <v-layout column fill-height justify-end>
+                  <v-card-text class="pb-0">
+                    <v-list dense style="background-color: transparent" two-line>
+                      <template v-for="(mensagem, index) in messages">
+                        <v-list-tile :key="index" color="transparent">
+                          <v-list-tile-content>
+                            <v-list-tile-title class="font-weight-medium body-1 grey--text text--lighten-3">
+                              {{mensagem.player}}
+                            </v-list-tile-title>
+                            <v-list-tile-title class="body-1 font-weight-light grey--text text--lighten-3">
+                              {{mensagem.message}}
+                            </v-list-tile-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                      </template>
+                    </v-list>
+                  </v-card-text>
+                  <v-card-actions class="pt-0 pb-0 pr-5 pl-5" >
+                    <v-text-field
+                      single-line
+                      flat
+                      solo
+                      hide-details
+                    ></v-text-field>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
             </v-flex>
             <v-flex xs5 class="pr-4" v-if="!jogando && jogador">
               <div class="text-xs-center title font-weight-light grey--text text--darken-2 pb-4">
@@ -112,29 +139,7 @@ export default {
   data () {
     return {
       jogando: false,
-      jogador: null,
-      jogadores: [
-        {
-          nome: 'Josefo',
-          stamina: 100,
-          vida: 100
-        },
-        {
-          nome: 'Maria',
-          stamina: 100,
-          vida: 80
-        },
-        {
-          nome: 'João',
-          stamina: 100,
-          vida: 50
-        },
-        {
-          nome: 'Janaina',
-          stamina: 10,
-          vida: 70
-        }
-      ]
+      jogador: null
     }
   },
   methods: {
@@ -146,6 +151,17 @@ export default {
           this.jogador = jogador
         }
       }
+    }
+  },
+  computed: {
+    player () {
+      return this.$store.getters.player
+    },
+    players () {
+      return this.$store.getters.player
+    },
+    messages () {
+      return this.$store.getters.messages
     }
   }
 }

@@ -7,8 +7,9 @@ export default new Vuex.Store({
   state: {
     messages: [],
     gameStarted: false,
+    players: [],
+    player: null,
     info: null,
-    error: null,
     messageWaiting: null
   },
   mutations: {
@@ -21,14 +22,17 @@ export default new Vuex.Store({
     setInfo (state, payload) {
       state.info = payload
     },
-    setError (state, payload) {
-      state.error = payload
-    },
     setMessageWaiting (state, payload) {
       state.messageWaiting = payload
     },
     setGameStarted (state, payload) {
       state.gameStarted = payload
+    },
+    setPlayer (state, payload) {
+      state.player = payload
+    },
+    setPlayers (state, payload) {
+      state.players = payload
     }
   },
   actions: {
@@ -38,14 +42,22 @@ export default new Vuex.Store({
     SOCKET_info ({ commit }, payload) {
       commit('setInfo', payload)
     },
-    SOCKET_error ({ commit }, payload) {
-      commit('setError', payload)
-    },
     SOCKET_players ({ commit }, payload) {
       commit('setMessageWaiting', payload)
     },
     SOCKET_start_game ({ commit }) {
       commit('setGameStarted', true)
+    },
+    SOCKET_send_info ({ commit }, payload) {
+      let players = JSON.parse(payload)
+      let player = players.find((pl) => {
+        return pl.sid === this._vm.$socket.id.split('#')[1]
+      })
+      players = players.filter((pl) => {
+        return pl.sid !== this._vm.$socket.id.split('#')[1]
+      })
+      commit('setPlayer', player)
+      commit('setPlayers', players)
     },
     clearMessages ({ commit }) {
       commit('setMessages', [])
@@ -64,14 +76,17 @@ export default new Vuex.Store({
     info (state) {
       return state.info
     },
-    error (state) {
-      return state.error
-    },
     messageWaiting (state) {
       return state.messageWaiting
     },
     gameStarted (state) {
       return state.gameStarted
+    },
+    player (state) {
+      return state.player
+    },
+    players (state) {
+      return state.players
     }
   }
 })

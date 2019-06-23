@@ -1,21 +1,23 @@
 <template>
   <v-app>
     <router-view/>
-    <v-snackbar
+    <v-dialog
+      hide-overlay
       v-model="snackbar.active"
-      bottom
-      :color="snackbar.color"
-      :timeout="6000"
-      :vertical="true"
+      width="400"
     >
-      {{snackbar.text}}
-        <v-btn
-          flat
-          @click="snackbar.active = false"
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
-    </v-snackbar>
+      <v-card color="grey">
+        <v-card-text class="subheader font-weight-medium grey--text text--lighten-3">
+          {{snackbar.text}}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat icon @click="snackbar.active = false">
+            <v-icon color="grey lighten-3">close</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -26,23 +28,27 @@ export default {
     return {
       snackbar: {
         active: false,
-        color: 'info',
-        text: null
+        text: null,
+        timeout: 4000
       }
     }
   },
   watch: {
+    'snackbar.active' (val) {
+      if (val) {
+        setTimeout(() => {
+          this.snackbar.active = false
+        }, this.snackbar.timeout)
+      }
+    },
+    gameStarted (val, oldval) {
+      if (val && !oldval) {
+        this.$router.push('/game')
+      }
+    },
     info (val) {
       if (val !== null && val !== undefined) {
         this.snackbar.text = val
-        this.snackbar.color = 'info'
-        this.snackbar.active = true
-      }
-    },
-    error (val) {
-      if (val !== null && val !== undefined) {
-        this.snackbar.text = val
-        this.snackbar.color = 'error'
         this.snackbar.active = true
       }
     }
@@ -51,8 +57,8 @@ export default {
     info () {
       return this.$store.getters.info
     },
-    error () {
-      return this.$store.getters.error
+    gameStarted () {
+      return this.$store.getters.gameStarted
     }
   }
 }
