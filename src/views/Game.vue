@@ -77,13 +77,13 @@
             <v-flex xs7 class="pl-4">
               <v-card height="calc(100% - 450px)" style="background-color: rgba(0,0,0,0.7)" flat>
                 <v-layout column fill-height justify-end>
-                  <v-card-text class="pb-0">
+                  <v-card-text class="pb-0 scroll-y" style="max-height: 400px">
                     <v-list dense style="background-color: transparent" two-line>
                       <template v-for="(mensagem, index) in messages">
                         <v-list-tile :key="index" color="transparent">
                           <v-list-tile-content>
                             <v-list-tile-title class="font-weight-medium body-1 grey--text text--lighten-3">
-                              {{mensagem.player}}
+                              {{mensagem.player}}:
                             </v-list-tile-title>
                             <v-list-tile-title class="body-1 font-weight-light grey--text text--lighten-3">
                               {{mensagem.message}}
@@ -93,13 +93,24 @@
                       </template>
                     </v-list>
                   </v-card-text>
-                  <v-card-actions class="pt-0 pb-0 pr-5 pl-5" >
-                    <v-text-field
-                      single-line
-                      flat
-                      solo
-                      hide-details
-                    ></v-text-field>
+                  <v-card-actions>
+                    <v-layout xs2>
+                      <v-flex class="text-xs-center">
+                        <v-btn icon flat class="mt-2" @click="apagarMensagens">
+                          <v-icon color="grey lighten-4">delete</v-icon>
+                        </v-btn>
+                      </v-flex>
+                      <v-flex xs10 class="pr-5">
+                        <v-text-field
+                          v-model="mensagem"
+                          placeholder="Mensagem"
+                          @keydown.enter="sendMessage"
+                          single-line
+                          flat
+                          solo
+                        ></v-text-field>
+                      </v-flex>
+                    </v-layout>
                   </v-card-actions>
                 </v-layout>
               </v-card>
@@ -139,10 +150,20 @@ export default {
   data () {
     return {
       jogando: false,
-      jogador: null
+      jogador: null,
+      mensagem: null
     }
   },
   methods: {
+    sendMessage () {
+      if (this.mensagem && this.mensagem.length) {
+        this.$store.dispatch('sendMessage', this.mensagem)
+        this.mensagem = null
+      }
+    },
+    apagarMensagens () {
+      this.$store.dispatch('clearMessages')
+    },
     selecionarJogador (jogador) {
       if (!this.jogando) {
         if (this.jogador === jogador) {
@@ -158,7 +179,7 @@ export default {
       return this.$store.getters.player
     },
     players () {
-      return this.$store.getters.player
+      return this.$store.getters.players
     },
     messages () {
       return this.$store.getters.messages

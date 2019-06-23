@@ -4,18 +4,12 @@
     <v-dialog
       hide-overlay
       v-model="snackbar.active"
-      width="400"
+      width="300"
     >
-      <v-card color="grey">
+      <v-card color="grey" @click="snackbar.active = false">
         <v-card-text class="subheader font-weight-medium grey--text text--lighten-3">
           {{snackbar.text}}
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn flat icon @click="snackbar.active = false">
-            <v-icon color="grey lighten-3">close</v-icon>
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-app>
@@ -34,13 +28,6 @@ export default {
     }
   },
   watch: {
-    'snackbar.active' (val) {
-      if (val) {
-        setTimeout(() => {
-          this.snackbar.active = false
-        }, this.snackbar.timeout)
-      }
-    },
     gameStarted (val, oldval) {
       if (val && !oldval) {
         this.$router.push('/game')
