@@ -26,7 +26,7 @@ export default new Vuex.Store({
   },
   actions: {
     SOCKET_new_message ({ commit }, payload) {
-      commit('addMessage', payload)
+      commit('addMessage', JSON.parse(payload))
     },
     SOCKET_info ({ commit }, payload) {
       commit('setInfo', payload)
