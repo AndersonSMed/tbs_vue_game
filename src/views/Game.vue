@@ -1,16 +1,16 @@
 <template>
-  <v-container fill-height grid-list-lg>
+  <v-container fill-height grid-list-lg class="pa-0">
     <v-layout fill-height row wrap justify-center>
       <v-flex xs12 md8>
         <v-card height="calc(100%)">
-          <v-card-text class="text-xs-center headline font-weight-light grey--text text--darken-2">
+          <v-card-text class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-0">
             {{player.nickname}}
           </v-card-text>
           <v-card-text>
             <v-layout row wrap>
               <v-flex xs6>
                 <div class="text-xs-center headline font-weight-medium grey--text text--darken-1">
-                  Vida
+                  Vida: {{player.vida}}
                 </div>
                 <v-progress-linear
                   color="error"
@@ -21,7 +21,7 @@
               </v-flex>
               <v-flex xs6>
                 <div class="text-xs-center headline font-weight-medium grey--text text--darken-1">
-                  Stamina
+                  Stamina: {{player.stamina}}
                 </div>
                 <v-progress-linear
                   color="success"
@@ -68,14 +68,17 @@
                 <div class="subheading font-weight-medium grey--text text--darken-1 pb-2">
                   Ações Tomadas
                 </div>
-                <v-card height="calc(100% - 33px)" style="background-color: rgba(0,0,0,0.05)">
+                <v-card height="200px" style="background-color: rgba(0,0,0,0.05)">
                 </v-card>
               </v-flex>
             </v-layout>
           </v-card-text>
-          <v-layout row wrap fill-height>
+          <v-layout row wrap>
             <v-flex xs7 class="pl-4">
-              <v-card height="calc(100% - 450px)" style="background-color: rgba(0,0,0,0.7)" flat>
+              <v-card height="410px" style="background-color: rgba(0,0,0,0.7)" flat>
+                <v-btn flat absolute disabled right top class="mt-5 mr-3">
+                  <span class="grey--text text--lighten-3">MENSAGENS</span>
+                </v-btn>
                 <v-layout column fill-height justify-end>
                   <v-card-text class="pb-0 scroll-y" style="max-height: 400px">
                     <v-list dense style="background-color: transparent" two-line>
@@ -117,7 +120,7 @@
             </v-flex>
             <v-flex xs5 class="pr-4" v-if="!jogando && jogador">
               <div class="text-xs-center title font-weight-light grey--text text--darken-2 pb-4">
-                {{jogador.nome}}
+                {{jogador.nickname}}
               </div>
               <div class="text-xs-center subheading font-weight-medium grey--text text--darken-1">
                 Vida: {{jogador.vida}}
