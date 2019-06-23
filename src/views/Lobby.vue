@@ -24,10 +24,10 @@
                   <v-list-tile :key="index" color="transparent">
                     <v-list-tile-content>
                       <v-list-tile-title class="font-weight-medium body-1 grey--text text--darken-1">
-                        {{mensagem.nickname}}
+                        {{mensagem.player}}
                       </v-list-tile-title>
                       <v-list-tile-title class="body-1 font-weight-light">
-                        {{mensagem.text}}
+                        {{mensagem.message}}
                       </v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -79,7 +79,8 @@ export default {
       this.$store.dispatch('clearMessages')
     },
     sendMessage () {
-      this.$store.dispatch('pushMessage', { nickname: 'TESTE', text: this.mensagem })
+      this.$store.dispatch('sendMessage', this.mensagem)
+      this.mensagem = null
     }
   }
 }

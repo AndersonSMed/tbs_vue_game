@@ -10,6 +10,7 @@
         <v-layout column>
           <v-flex>
             <v-text-field
+              v-model="nickname"
               outline
               label="Digite seu nickname"
               single-line
@@ -39,10 +40,13 @@
 export default {
   data () {
     return {
+      nickname: null
     }
   },
   methods: {
     conectar () {
+      this.$store.dispatch('enterLobby', this.nickname)
+      this.$router.push('lobby')
     }
   }
 }
