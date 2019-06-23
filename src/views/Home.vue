@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height grid-list-lg>
     <v-layout fill-height justify-center align-content-center row wrap>
-      <v-flex xs6 md3>
+      <v-flex xs12 md3>
         <v-layout column>
           <v-flex class="text-xs-center headline font-weight-light success--text text--lighten-1">
             Seja bem vindo(a)
