@@ -4,7 +4,7 @@
       <v-flex xs12 class="text-xs-center headline font-weight-bold error--text text--lighten-2">
         LOBBY
         <div class="subheader font-weight-light grey--text text--lighten-1">
-          Esperando por jogadores
+          Esperando por jogadores {{messageWaiting}}
         </div>
       </v-flex>
       <v-flex xs8>
@@ -39,6 +39,7 @@
       </v-flex>
       <v-flex xs7>
         <v-text-field
+          @keydown.enter="sendMessage"
           v-model="mensagem"
           label="Enviar mensagem"
           single-line
@@ -52,6 +53,7 @@
               flat
               class="mt-0"
               @click="sendMessage"
+              :disabled="!(mensagem && mensagem.length) "
             >
               <v-icon color="primary lighten-2" medium>send</v-icon>
             </v-btn>
@@ -72,6 +74,9 @@ export default {
   computed: {
     messages () {
       return this.$store.getters.messages
+    },
+    messageWaiting () {
+      return this.$store.getters.messageWaiting
     }
   },
   methods: {
@@ -79,8 +84,10 @@ export default {
       this.$store.dispatch('clearMessages')
     },
     sendMessage () {
-      this.$store.dispatch('sendMessage', this.mensagem)
-      this.mensagem = null
+      if (this.mensagem && this.mensagem.length) {
+        this.$store.dispatch('sendMessage', this.mensagem)
+        this.mensagem = null
+      }
     }
   }
 }

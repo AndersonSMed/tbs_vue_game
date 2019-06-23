@@ -8,7 +8,8 @@ export default new Vuex.Store({
     messages: [],
     gameStarted: false,
     info: null,
-    error: null
+    error: null,
+    messageWaiting: null
   },
   mutations: {
     addMessage (state, payload) {
@@ -22,6 +23,12 @@ export default new Vuex.Store({
     },
     setError (state, payload) {
       state.error = payload
+    },
+    setMessageWaiting (state, payload) {
+      state.messageWaiting = payload
+    },
+    setGameStarted (state, payload) {
+      state.gameStarted = payload
     }
   },
   actions: {
@@ -33,6 +40,12 @@ export default new Vuex.Store({
     },
     SOCKET_error ({ commit }, payload) {
       commit('setError', payload)
+    },
+    SOCKET_players ({ commit }, payload) {
+      commit('setMessageWaiting', payload)
+    },
+    SOCKET_start_game ({ commit }) {
+      commit('setGameStarted', true)
     },
     clearMessages ({ commit }) {
       commit('setMessages', [])
@@ -53,6 +66,12 @@ export default new Vuex.Store({
     },
     error (state) {
       return state.error
+    },
+    messageWaiting (state) {
+      return state.messageWaiting
+    },
+    gameStarted (state) {
+      return state.gameStarted
     }
   }
 })
