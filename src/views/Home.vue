@@ -1,18 +1,55 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-container fluid fill-height grid-list-lg>
+    <v-layout fill-height justify-center align-content-center row wrap>
+      <v-flex xs6 md3>
+        <v-layout column>
+          <v-flex class="text-xs-center headline font-weight-light success--text text--lighten-1">
+            Seja bem vindo(a)
+          </v-flex>
+        </v-layout>
+        <v-layout column>
+          <v-flex>
+            <v-text-field
+              outline
+              label="Digite seu nickname"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout column>
+          <v-flex>
+            <v-text-field
+              outline
+              single-line
+              hide-details
+              label="IP do servidor"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex>
+            <v-btn
+              block
+              outline
+              class="green--text font-weight-bold"
+            >
+              ENTRAR
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  data () {
+    return {
+
+    }
   }
 }
 </script>
