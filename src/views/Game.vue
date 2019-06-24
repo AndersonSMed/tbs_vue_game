@@ -203,10 +203,10 @@
                     <v-tooltip left>
                       <template v-slot:activator="{ on }">
                         <v-btn flat icon v-on="on" @click="passarVez">
-                          <v-icon color="grey darken-2">navigate_next</v-icon>
+                          <v-icon color="success darken-1">navigate_next</v-icon>
                         </v-btn>
                       </template>
-                      Passar a vez
+                      Passar a vez (+20 de stamina)
                     </v-tooltip>
                   </v-flex>
                 </v-layout>
