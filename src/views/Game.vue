@@ -212,10 +212,13 @@
                 </v-layout>
               </template>
             </v-flex>
-            <v-flex xs5 class="pr-4" v-else-if="myTurn">
-              <div class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-2 pt-2">
-                Esse é o seu turno {{player.nickname}}, selecione um jogador para que possa atacar
+            <v-flex xs5 align-self-center class="pr-4" v-else-if="myTurn">
+              <div class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-5">
+                Esse é o seu turno, {{player.nickname}}, selecione um jogador para que possa atacar
               </div>
+              <v-btn block flat class="success--text text--darken-1" @click="passarVez">
+                PASSAR MINHA VEZ (+20 de stamina)
+              </v-btn>
             </v-flex>
           </v-layout>
         </v-card>
