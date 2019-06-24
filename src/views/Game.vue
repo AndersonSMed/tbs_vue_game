@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height grid-list-lg class="pa-0">
     <v-layout fill-height row wrap justify-center>
-      <v-flex xs12 md8>
+      <v-flex xs12 md11 lg10 class='pa-0'>
         <v-card height="calc(100%)">
           <v-card-text class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-0">
             {{player.nickname}}
@@ -40,7 +40,7 @@
                 </div>
                 <v-list dense style="border: 1px solid black">
                   <template v-for="(jogador) in players">
-                    <v-list-tile :key="jogador.sid" ripple @click="selecionarJogador(jogador)">
+                    <v-list-tile :key="jogador.sid" ripple @click="selecionarJogador(jogador)" :class="{opaco: !jogador.alive}">
                       <v-list-tile-content>
                         <v-list-tile-title class="font-weight-medium body-1">
                           {{jogador.nickname}}
@@ -66,9 +66,27 @@
               </v-flex>
               <v-flex xs6 md8>
                 <div class="subheading font-weight-medium grey--text text--darken-1 pb-2">
-                  Ações Tomadas
+                  Histórico de ações
                 </div>
                 <v-card height="200px" style="background-color: rgba(0,0,0,0.05)">
+                  <v-layout column fill-height justify-end>
+                    <v-card-text class="pb-0 scroll-y" style="max-height: calc(100%);">
+                      <v-btn icon flat absolute right top class="mt-5 mr-3" style="z-index: 100;" @click="clearLog">
+                        <v-icon color="grey darken-1">delete</v-icon>
+                      </v-btn>
+                      <v-list dense style="background-color: transparent">
+                        <template v-for="(mensagem, index) in log">
+                          <v-list-tile :key="index" color="transparent">
+                            <v-list-tile-content>
+                              <v-list-tile-title class="body-1 font-weight-light grey--text text--darken-3">
+                                {{mensagem}}
+                              </v-list-tile-title>
+                            </v-list-tile-content>
+                          </v-list-tile>
+                        </template>
+                      </v-list>
+                    </v-card-text>
+                  </v-layout>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -77,10 +95,10 @@
             <v-flex xs7 class="pl-4">
               <v-card height="410px" style="background-color: rgba(0,0,0,0.7)" flat>
                 <v-btn flat absolute disabled right top class="mt-5 mr-3">
-                  <span class="grey--text text--lighten-3">MENSAGENS</span>
+                  <span class="grey--text text--lighten-3">CHAT</span>
                 </v-btn>
                 <v-layout column fill-height justify-end>
-                  <v-card-text class="pb-0 scroll-y" style="max-height: 400px">
+                  <v-card-text class="pb-0 scroll-y" style="max-height: 400px;">
                     <v-list dense style="background-color: transparent" two-line>
                       <template v-for="(mensagem, index) in messages">
                         <v-list-tile :key="index" color="transparent">
@@ -140,6 +158,64 @@
                 :value="jogador.stamina"
                 height="10"
               ></v-progress-linear>
+              <template v-if="myTurn">
+                <div class="text-xs-center title font-weight-light grey--text text--darken-2 pb-2 pt-2">
+                  Selecione uma ação para atacar
+                </div>
+                <v-layout>
+                  <v-flex xs10>
+                    <v-list>
+                      <template v-for="attack in attacks">
+                        <v-list-tile :key="attack.id" ripple v-if="attack.cost <= player.stamina">
+                          <v-list-tile-content>
+                            <v-list-tile-title class="font-weight-medium grey--text text--darken-2">
+                              {{attack.name}}
+                            </v-list-tile-title>
+                          </v-list-tile-content>
+                          <v-list-tile-action>
+                            <v-list-tile-action-text class="text-xs-left">
+                              Causa {{attack.damage}} de dano
+                            </v-list-tile-action-text>
+                            <v-list-tile-action-text class="text-xs-left">
+                              Custa {{attack.cost}} de stamina
+                            </v-list-tile-action-text>
+                          </v-list-tile-action>
+                        </v-list-tile>
+                        <v-list-tile :key="attack.id" v-else class="opaco">
+                          <v-list-tile-content>
+                            <v-list-tile-title class="font-weight-medium grey--text text--darken-2">
+                              {{attack.name}}
+                            </v-list-tile-title>
+                          </v-list-tile-content>
+                          <v-list-tile-action>
+                            <v-list-tile-action-text>
+                              Causa {{attack.damage}} de dano
+                            </v-list-tile-action-text>
+                            <v-list-tile-action-text>
+                              Custa {{attack.cost}} de stamina
+                            </v-list-tile-action-text>
+                          </v-list-tile-action>
+                        </v-list-tile>
+                      </template>
+                    </v-list>
+                  </v-flex>
+                  <v-flex xs2 align-self-center>
+                    <v-tooltip left>
+                      <template v-slot:activator="{ on }">
+                        <v-btn flat icon v-on="on" @click="passarVez">
+                          <v-icon color="grey darken-2">navigate_next</v-icon>
+                        </v-btn>
+                      </template>
+                      Passar a vez
+                    </v-tooltip>
+                  </v-flex>
+                </v-layout>
+              </template>
+            </v-flex>
+            <v-flex xs5 class="pr-4" v-else-if="myTurn">
+              <div class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-2 pt-2">
+                Esse é o seu turno {{player.nickname}}, selecione um jogador para que possa atacar
+              </div>
             </v-flex>
           </v-layout>
         </v-card>
@@ -158,6 +234,12 @@ export default {
     }
   },
   methods: {
+    clearLog () {
+      this.$store.dispatch('clearLog')
+    },
+    passarVez () {
+      this.$store.dispatch('passarVez')
+    },
     sendMessage () {
       if (this.mensagem && this.mensagem.length) {
         this.$store.dispatch('sendMessage', this.mensagem)
@@ -186,13 +268,22 @@ export default {
     },
     messages () {
       return this.$store.getters.messages
+    },
+    myTurn () {
+      return this.$store.getters.myTurn
+    },
+    attacks () {
+      return this.$store.getters.attacks
+    },
+    log () {
+      return this.$store.getters.log
     }
   }
 }
 </script>
 
 <style scoped>
-  .morto {
+  .opaco {
     opacity: 0.2;
   }
 </style>

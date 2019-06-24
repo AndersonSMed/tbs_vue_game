@@ -14,7 +14,7 @@
           <v-card-text class="text-xs-center subheading font-weight-medium success--text text--lighten-1 text-truncate">
             Jogadores Online
             <v-list dense style="background-color: transparent" class="mt-2">
-              <v-list-tile>
+              <v-list-tile v-if="player">
                 <v-list-tile-content>
                   <v-list-tile-title class="text-truncate font-weight-medium grey--text text--darken-2 subheading text-xs-center">
                     {{player.nickname}}

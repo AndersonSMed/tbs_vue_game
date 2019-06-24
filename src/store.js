@@ -10,7 +10,10 @@ export default new Vuex.Store({
     players: [],
     player: null,
     info: null,
-    messageWaiting: null
+    messageWaiting: null,
+    myTurn: false,
+    attacks: [],
+    log: []
   },
   mutations: {
     addMessage (state, payload) {
@@ -33,9 +36,30 @@ export default new Vuex.Store({
     },
     setPlayers (state, payload) {
       state.players = payload
+    },
+    setMyTurn (state, payload) {
+      state.myTurn = payload
+    },
+    setAttacks (state, payload) {
+      state.attacks = payload
+    },
+    addLog (state, payload) {
+      state.log.push(payload)
+    },
+    setLog (state, payload) {
+      state.log = payload
     }
   },
   actions: {
+    SOCKET_set_actions ({ commit }, payload) {
+      commit('setAttacks', JSON.parse(payload))
+    },
+    SOCKET_log ({ commit }, payload) {
+      commit('addLog', payload)
+    },
+    SOCKET_set_turn ({ commit }, payload) {
+      commit('setMyTurn', payload)
+    },
     SOCKET_new_message ({ commit }, payload) {
       commit('addMessage', JSON.parse(payload))
     },
@@ -67,6 +91,12 @@ export default new Vuex.Store({
     },
     sendMessage ({ commit }, payload) {
       this._vm.$socket.emit('send_message', payload)
+    },
+    passarVez ({ commit }) {
+      this._vm.$socket.emit('passar_vez')
+    },
+    clearLog ({ commit }) {
+      commit('setLog', [])
     }
   },
   getters: {
@@ -87,6 +117,15 @@ export default new Vuex.Store({
     },
     players (state) {
       return state.players
+    },
+    myTurn (state) {
+      return state.myTurn
+    },
+    attacks (state) {
+      return state.attacks
+    },
+    log (state) {
+      return state.log
     }
   }
 })
