@@ -97,6 +97,9 @@ export default new Vuex.Store({
     },
     clearLog ({ commit }) {
       commit('setLog', [])
+    },
+    attackPlayer ({ commit }, payload) {
+      this._vm.$socket.emit('attack', payload.targetSid, payload.actionId)
     }
   },
   getters: {

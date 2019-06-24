@@ -166,7 +166,7 @@
                   <v-flex xs10>
                     <v-list>
                       <template v-for="attack in attacks">
-                        <v-list-tile :key="attack.id" ripple v-if="attack.cost <= player.stamina">
+                        <v-list-tile :key="attack.id" ripple v-if="attack.cost <= player.stamina" @click="atacarPlayer(attack)">
                           <v-list-tile-content>
                             <v-list-tile-title class="font-weight-medium grey--text text--darken-2">
                               {{attack.name}}
@@ -239,12 +239,17 @@ export default {
     },
     passarVez () {
       this.$store.dispatch('passarVez')
+      this.jogador = null
     },
     sendMessage () {
       if (this.mensagem && this.mensagem.length) {
         this.$store.dispatch('sendMessage', this.mensagem)
         this.mensagem = null
       }
+    },
+    atacarPlayer (action) {
+      this.$store.dispatch('attackPlayer', { targetSid: this.jogador.sid, actionId: action.id })
+      this.jogador = null
     },
     apagarMensagens () {
       this.$store.dispatch('clearMessages')
