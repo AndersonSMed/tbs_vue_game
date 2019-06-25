@@ -158,7 +158,7 @@
                 :value="jogador.stamina"
                 height="10"
               ></v-progress-linear>
-              <template v-if="myTurn">
+              <template v-if="myTurn && jogador.alive">
                 <div class="text-xs-center title font-weight-light grey--text text--darken-2 pb-2 pt-2">
                   Selecione uma ação para atacar
                 </div>
@@ -211,6 +211,9 @@
                   </v-flex>
                 </v-layout>
               </template>
+              <v-btn block flat class="success--text text--darken-1" @click="passarVez" v-else-if="!jogador.alive && myTurn">
+                PASSAR MINHA VEZ (+20 de stamina)
+              </v-btn>
             </v-flex>
             <v-flex xs5 align-self-center class="pr-4" v-else-if="myTurn">
               <div class="text-xs-center headline font-weight-light grey--text text--darken-2 pb-5">
@@ -237,12 +240,18 @@ export default {
     }
   },
   methods: {
+    atualizarJogadorSelecionado (jogadores) {
+      if (this.jogador) {
+        this.jogador = jogadores.find((pl) => {
+          return pl.sid === this.jogador.sid
+        })
+      }
+    },
     clearLog () {
       this.$store.dispatch('clearLog')
     },
     passarVez () {
       this.$store.dispatch('passarVez')
-      this.jogador = null
     },
     sendMessage () {
       if (this.mensagem && this.mensagem.length) {
@@ -252,7 +261,6 @@ export default {
     },
     atacarPlayer (action) {
       this.$store.dispatch('attackPlayer', { targetSid: this.jogador.sid, actionId: action.id })
-      this.jogador = null
     },
     apagarMensagens () {
       this.$store.dispatch('clearMessages')
@@ -265,6 +273,11 @@ export default {
           this.jogador = jogador
         }
       }
+    }
+  },
+  watch: {
+    players (val) {
+      this.atualizarJogadorSelecionado(val)
     }
   },
   computed: {
